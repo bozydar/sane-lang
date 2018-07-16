@@ -57,6 +57,13 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitParameter([NotNull] SaneParser.ParameterContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>call</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCall([NotNull] SaneParser.CallContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>numericAtomExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
@@ -70,6 +77,13 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMulDivExp([NotNull] SaneParser.MulDivExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>function</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitFunction([NotNull] SaneParser.FunctionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>parenthesisExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.

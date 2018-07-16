@@ -84,6 +84,20 @@ public partial class SaneBaseListener : ISaneListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitParameter([NotNull] SaneParser.ParameterContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by the <c>call</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterCall([NotNull] SaneParser.CallContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>call</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitCall([NotNull] SaneParser.CallContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by the <c>numericAtomExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
@@ -111,6 +125,20 @@ public partial class SaneBaseListener : ISaneListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitMulDivExp([NotNull] SaneParser.MulDivExpContext context) { }
+	/// <summary>
+	/// Enter a parse tree produced by the <c>function</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterFunction([NotNull] SaneParser.FunctionContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>function</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitFunction([NotNull] SaneParser.FunctionContext context) { }
 	/// <summary>
 	/// Enter a parse tree produced by the <c>parenthesisExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.

@@ -72,6 +72,18 @@ public interface ISaneListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitParameter([NotNull] SaneParser.ParameterContext context);
 	/// <summary>
+	/// Enter a parse tree produced by the <c>call</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterCall([NotNull] SaneParser.CallContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>call</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitCall([NotNull] SaneParser.CallContext context);
+	/// <summary>
 	/// Enter a parse tree produced by the <c>numericAtomExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
@@ -95,6 +107,18 @@ public interface ISaneListener : IParseTreeListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	void ExitMulDivExp([NotNull] SaneParser.MulDivExpContext context);
+	/// <summary>
+	/// Enter a parse tree produced by the <c>function</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterFunction([NotNull] SaneParser.FunctionContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>function</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitFunction([NotNull] SaneParser.FunctionContext context);
 	/// <summary>
 	/// Enter a parse tree produced by the <c>parenthesisExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.

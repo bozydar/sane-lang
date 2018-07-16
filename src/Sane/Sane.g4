@@ -10,7 +10,7 @@ module
     : 'module' moduleName=ID  (declaration|let)* 'end';
     
 let
-    : 'let' bindingName=ID parameter* '=' expression;
+    : 'let' bindingName=ID '=' expression;
     
 parameter
     : ID;
@@ -22,6 +22,10 @@ expression
         #mulDivExp
     | left=expression operation=(PLUS|MINUS) right=expression        
         #addSubExp
+    | funcName=ID '(' expressions=expression* ')'
+        #call
+    | '(' parameters=parameter* ')' '->' body=expression
+        #function
     | value=NUMBER                                    
         #numericAtomExp
     | ID

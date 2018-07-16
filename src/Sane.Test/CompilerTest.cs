@@ -38,26 +38,53 @@ A.y = (A.x + 1) * 2 - 3 / 4;
 ";
             ScriptAssert.Equal(js, subject.Translate(sane));
         }
-
+        
         [Fact]
-        public void Functions()
+        public void DeclareFunctions()
         {
             var subject = new Compiler();
             const string sane = @"
             module A
-                let x a = a + 1
-                let y = x 2    
-                let y = z where 
-                    let z = x + 2
+                let x = (a) -> a * 2
             end";
 
             const string js = @"A = {};
 A.x = function(a) {
-return a + 1;
+return a * 2;
 };
-A.y = A.x(2);
 ";
             ScriptAssert.Equal(js, subject.Translate(sane));
+        }
+
+        [Fact]
+        public void CallFunction()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                let x = (a) -> a * 2
+                let y = (b) -> x(b + 3)
+                let z = y(2)
+                let w = (a b) -> (a) -> a + b + y(b * 2)
+            end";
+
+            const string js = @"A = {};
+A.x = function(a) {
+return a * 2;
+};
+A.y = function(b) {
+return A.x(b + 3);
+};
+A.z = A.y(2);
+A.w = function(a, b) {
+return function(a) {
+return a + b + A.y(b * 2);
+};
+};
+";
+            var result = subject.Translate(sane);
+            Console.WriteLine(result);
+            ScriptAssert.Equal(js, result);
         }
 
         public void DeclareUnion() {
