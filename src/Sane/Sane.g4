@@ -1,28 +1,57 @@
 grammar Sane;
- 
-module : 'module' ID '=' (let|declaration)+;
 
-let : ID '=' expression;
+options {
+    language=CSharp;   
+}
+program 
+    : module+ EOF;
+      
+module 
+    : 'module' moduleName=ID  (declaration|let)* 'end';
+    
+let
+    : 'let' bindingName=ID parameter* '=' expression;
+    
+parameter
+    : ID;
+
 expression 
-    : '(' expression ')'
-    | expression (ASTERISK|SLASH) expression
-    | expression (PLUS|MINUS) expression ;
+    : '(' expression ')'                        
+        #parenthesisExp
+    | left=expression operation=(ASTERISK|SLASH) right=expression    
+        #mulDivExp
+    | left=expression operation=(PLUS|MINUS) right=expression        
+        #addSubExp
+    | value=NUMBER                                    
+        #numericAtomExp
+    | ID
+        #idAtomExp;
 
 declaration
     : ID ':' type;
 
 type
-    : ID;
+    : '(' type+ ')'                        
+        #parenthesisType
+    | type ',' type
+        #commaType
+    | type '->' type
+        #curryType    
+    | ID
+        #idAtomType;
 
-
-fragment LETTER     : [a-zA-Z] ;
-fragment DIGIT      : [0-9] ;
-
-ID : LETTER DIGIT;
+ID : LETTER+ DIGIT*;
 ASTERISK            : '*' ;
 SLASH               : '/' ;
 PLUS                : '+' ;
 MINUS               : '-' ;
+NUMBER              : DIGIT+ ('.' DIGIT+)?;
+WHITESPACE          : [ \n\t\r]+ -> skip;
+SingleLineComment   : '//' ~[\r\n\u2028\u2029]* -> channel(HIDDEN);
+
+fragment LETTER     : [a-zA-Z]+ ;
+fragment DIGIT      : [0-9]+ ;
+
 
 // expression          : '(' expression ')'                        #parenthesisExp
 //                     | expression (ASTERISK|SLASH) expression    #mulDivExp

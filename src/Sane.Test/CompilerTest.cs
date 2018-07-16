@@ -4,23 +4,85 @@ using Sane;
 
 namespace Sane.Test
 {
+    
     public class CompilerTest
     {
         [Fact]
         public void DeclareConst()
         {
             var subject = new Compiler();
-            var sane = @"
-            module A = 
-              x : Integer
-              x = 1
-            ";
+            const string sane = @"
+            module A
+                let x = 1
+            end";
 
-            var js = @"
-            A = {};
-            A.x = 1;
+            const string js = @"A = {};
+A.x = 1;
+";
+            ScriptAssert.Equal(js, subject.Translate(sane));
+        }
+        
+        [Fact]
+        public void DeclareOperations()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                let x = 1
+                let y = (x + 1) * 2 - 3 / 4    
+            end";
+
+            const string js = @"A = {};
+A.x = 1;
+A.y = (A.x + 1) * 2 - 3 / 4;
+";
+            ScriptAssert.Equal(js, subject.Translate(sane));
+        }
+
+        [Fact]
+        public void Functions()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                let x a = a + 1
+                let y = x 2    
+                let y = z where 
+                    let z = x + 2
+            end";
+
+            const string js = @"A = {};
+A.x = function(a) {
+return a + 1;
+};
+A.y = A.x(2);
+";
+            ScriptAssert.Equal(js, subject.Translate(sane));
+        }
+
+        public void DeclareUnion() {
+            var subject = new Compiler();
+            var sane = @"
+            module A =
+                type Maybe T = union {
+                    Value : T
+                    None
+                }
+
+                x : Maybe String
+                x = Maybe.Value ""something""
+
+                default : Maybe String -> String -> String
+                default maybe defValue = {
+                    match maybe {
+                        with Maybe.Value as value -> value
+                        with Maybe.None -> defValue
+                    }
+                }
+
+                defaultNothing maybe = default maybe ""nothing""
+            }
             ";
-            Assert.Equal(subject.Translate(sane), js);
         }
 
         public void DeclareFunction()
@@ -39,9 +101,9 @@ namespace Sane.Test
                   b : Integer
               }
 
-              type Maybe T = {
-                  Some : T,
-                  None
+              type Maybe(T) = union {
+                  some : T,
+                  none : Unit
               }
 
               type AAndBOther (AAndB, CAndD) = {
