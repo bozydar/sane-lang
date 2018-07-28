@@ -36,18 +36,6 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CLSCompliant(false)]
 public partial class SaneBaseListener : ISaneListener {
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="SaneParser.program"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void EnterProgram([NotNull] SaneParser.ProgramContext context) { }
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="SaneParser.program"/>.
-	/// <para>The default implementation does nothing.</para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	public virtual void ExitProgram([NotNull] SaneParser.ProgramContext context) { }
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="SaneParser.module"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>

@@ -33,12 +33,6 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SaneParser.program"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitProgram([NotNull] SaneParser.ProgramContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="SaneParser.module"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

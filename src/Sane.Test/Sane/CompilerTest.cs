@@ -1,13 +1,23 @@
 using System;
+using System.Reflection;
 using Xunit;
 using Sane;
+using Sane.Test.Utils;
+using Xunit.Abstractions;
 
-namespace Sane.Test
+namespace Sane.Test.Sane
 {
     
     public class CompilerTest
     {
-        [Fact]
+        private readonly ITestOutputHelper output;
+
+        public CompilerTest(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+        
+        [Fact]        
         public void DeclareConst()
         {
             var subject = new Compiler();
@@ -19,7 +29,21 @@ namespace Sane.Test
             const string js = @"A = {};
 A.x = 1;
 ";
-            ScriptAssert.Equal(js, subject.Translate(sane));
+            ScriptAssert.Equal(js, "", subject.Translate(sane));
+        }
+        
+        [Fact]        
+        public void DoNotDeclareTheSameName()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                let x = 1
+                let x = 2
+            end
+";
+            
+            ScriptAssert.EqualErrors("Variable `x` already declared at 3:16 near `let`" , subject.Translate(sane));
         }
         
         [Fact]
@@ -36,8 +60,9 @@ A.x = 1;
 A.x = 1;
 A.y = (A.x + 1) * 2 - 3 / 4;
 ";
-            ScriptAssert.Equal(js, subject.Translate(sane));
+            ScriptAssert.Equal(js, "", subject.Translate(sane));
         }
+        
         
         [Fact]
         public void DeclareFunctions()
@@ -53,7 +78,7 @@ A.x = function(a) {
 return a * 2;
 };
 ";
-            ScriptAssert.Equal(js, subject.Translate(sane));
+            ScriptAssert.Equal(js, "", subject.Translate(sane));
         }
 
         [Fact]
@@ -82,11 +107,54 @@ return a + b + A.y(b * 2);
 };
 };
 ";
+            output.WriteLine("CallFunction");
             var result = subject.Translate(sane);
-            Console.WriteLine(result);
-            ScriptAssert.Equal(js, result);
+            ScriptAssert.Equal(js, "", result);
         }
 
+        [Fact]
+        public void CantFindId()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                let x = () -> b
+            end
+";
+            var result = subject.Translate(sane);
+        }
+
+        public void DeclareRecursive()
+        {
+                        
+            // atrybut "rec" może mówić, by zapamiętać ID i użyć wewnątrz declaracji
+            var t = @"
+            rec type B where
+                a : String
+                b : B
+            end
+
+            rec let y = (a) -> cond
+                a > 10 -> ""stop""
+                _ -> y(a+1)
+            end
+            
+                 
+";
+            // Zastanowic sie czy taka składnia jest fajna.
+            const string sane = @"
+            A = module (x w) where
+                let x = 1
+                let x = 2
+                let w = func (a b c) -> result where
+                    let result = a + d where
+                        let d = b + c
+                    end
+                end 
+            end";
+        }
+        
+        
         public void DeclareUnion() {
             var subject = new Compiler();
             var sane = @"
@@ -150,7 +218,7 @@ return a + b + A.y(b * 2);
                 return a + b;
             };
             ";
-            Assert.Equal(subject.Translate(sane), js);
+//            Assert.Equal(subject.Translate(sane), js);
         }
     }
 }

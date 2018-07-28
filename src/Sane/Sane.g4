@@ -3,8 +3,6 @@ grammar Sane;
 options {
     language=CSharp;   
 }
-program 
-    : module+ EOF;
       
 module 
     : 'module' moduleName=ID  (declaration|let)* 'end';

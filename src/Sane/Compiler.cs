@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Sane.Grammar;
@@ -11,7 +12,7 @@ namespace Sane
 
         }
 
-        public string Translate(string input)
+        public TranslationResult Translate(string input)
         {
             AntlrInputStream inputStream = new AntlrInputStream(input);
             var lexer = new SaneLexer(inputStream);
@@ -20,8 +21,10 @@ namespace Sane
             var visitor = new SaneVisitor();            
             var walker = new ParseTreeWalker();
             var module = parser.module();
-            Console.WriteLine(module);
-            return visitor.Visit(module);
+
+            var output = visitor.Visit(module);
+            var errors = string.Join("\n", visitor.Errors);
+            return new TranslationResult(output, errors);
         }
     }
 }

@@ -32,16 +32,6 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface ISaneListener : IParseTreeListener {
 	/// <summary>
-	/// Enter a parse tree produced by <see cref="SaneParser.program"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void EnterProgram([NotNull] SaneParser.ProgramContext context);
-	/// <summary>
-	/// Exit a parse tree produced by <see cref="SaneParser.program"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	void ExitProgram([NotNull] SaneParser.ProgramContext context);
-	/// <summary>
 	/// Enter a parse tree produced by <see cref="SaneParser.module"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
