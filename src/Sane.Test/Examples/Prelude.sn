@@ -1,0 +1,51 @@
+module List 
+importing
+    String as Str
+    Numbers as Num
+    Prelude
+return
+    map map_r map_tr
+where
+
+    map : List(A) -> (A -> B) -> List(B)
+    ext map = ```function (list, func) {
+        list.map(func);
+    }
+    ```
+
+    map_r : List(A) -> (A -> B) -> List(B)
+    rec map_r = (list func) -> 
+        return 
+            if length(list) == 0
+                list_
+            else
+                return 
+                    concat(head_, map_r(tail_, func)) 
+                where
+                    head_ = func(head(list))
+                    tail_ = map_r(tail(list))
+        where
+            list_ = list
+        
+
+    rec map_tr = (list func) ->
+        return 
+            loop(list func) 
+        where
+            rec loop = (acc) -> 
+                if length(acc) == 0
+                    revert(acc)
+                else
+                    return loop(con) where 
+                        con = concat(func(head(list)) tail(list))
+
+    def revert : List(A) -> List(A)
+    rec revert = (list) ->
+        if length(list) < 1
+            list
+        else 
+            let
+                tail_ = tail(list)
+                head_ = head(list)
+            in
+                concat(revert(tail_) head_)

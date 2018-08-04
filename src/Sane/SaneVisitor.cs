@@ -15,7 +15,7 @@ namespace Sane {
     {
         private readonly Stack<SaneParser.ModuleContext> _moduleContexts = new Stack<SaneParser.ModuleContext>();
         private readonly Stack<SaneParser.FunctionContext> _functionContexts = new Stack<SaneParser.FunctionContext>();
-        private Scope _currentScope;
+        private Semantics.Scope _currentScope;
 
         public IList<string> Errors { get; } = new List<string>();
 

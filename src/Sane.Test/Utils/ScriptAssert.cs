@@ -28,10 +28,10 @@ namespace Sane.Test.Utils
             Equal(expectedErrors, translationResult.Errors);            
         }
 
-        private static readonly Regex CrCn = new Regex("\r\n");
+        private static readonly Regex CrCn = new Regex("(\r)?\n");
         private static string NormalizeEol(string value)
         {
-            return CrCn.Replace(value, "\n");
+            return CrCn.Replace(value, "");
         }
     }
 }
