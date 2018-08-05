@@ -44,6 +44,10 @@ namespace Sane
             _scope.AddVariable(node.Name, node.Expr);
             var left = VariablePath(node.Name);
             var right = Visit(node.Expr);
+            if (right == null)
+            {
+                AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Name}` has no value defined.");
+            }
             Console.WriteLine("HERE");
             return $"{left} = {right}";
         }
@@ -75,6 +79,9 @@ namespace Sane
         public override string Visit(ExprNode node)
         {
             dynamic arg = node;
+            Console.WriteLine("arg");
+            Console.WriteLine(arg);
+            Console.WriteLine("-----");
             return Visit(arg);            
         }
 

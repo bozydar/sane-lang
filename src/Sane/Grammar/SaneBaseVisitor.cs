@@ -87,6 +87,17 @@ public partial class SaneBaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// <return>The visitor result.</return>
 	public virtual Result VisitNumericAtomExp([NotNull] SaneParser.NumericAtomExpContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitStringAtomExp([NotNull] SaneParser.StringAtomExpContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>mulDivExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// <para>

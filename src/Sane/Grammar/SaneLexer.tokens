@@ -15,6 +15,7 @@ MINUS=14
 NUMBER=15
 WHITESPACE=16
 SingleLineComment=17
+ESCAPED_STRING=18
 'module'=1
 'end'=2
 'let'=3

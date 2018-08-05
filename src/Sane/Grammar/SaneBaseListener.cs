@@ -100,6 +100,20 @@ public partial class SaneBaseListener : ISaneListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitNumericAtomExp([NotNull] SaneParser.NumericAtomExpContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterStringAtomExp([NotNull] SaneParser.StringAtomExpContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitStringAtomExp([NotNull] SaneParser.StringAtomExpContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by the <c>mulDivExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>

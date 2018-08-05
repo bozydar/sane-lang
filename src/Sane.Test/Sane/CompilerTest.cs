@@ -10,27 +10,29 @@ namespace Sane.Test.Sane
     
     public class CompilerTest
     {
-//        private readonly ITestOutputHelper output;
-//
-//        public CompilerTest(ITestOutputHelper output)
-//        {
-//            this.output = output;
-//        }
-//        
-//        [Fact]        
-//        public void DeclareConst()
-//        {
-//            var subject = new Compiler();
-//            const string sane = @"
-//            module A
-//                let x = 1
-//            end";
-//
-//            const string js = @"A = {};
-//A.x = 1;
-//";
-//            ScriptAssert.Equal(js, "", subject.Translate(sane));
-//        }
+        private readonly ITestOutputHelper output;
+
+        public CompilerTest(ITestOutputHelper output)
+        {
+            this.output = output;
+        }
+        
+        [Fact]        
+        public void DeclareConst()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                let x = 1
+                let y = ""dupa """"dupa"""" ""
+            end";
+
+            const string js = @"A = {};
+A.x = 1;
+A.y = ""dupa \""dupa\"" "";
+";
+            ScriptAssert.Equal(js, "", subject.Translate(sane));
+        }
 //        
 //        [Fact]        
 //        public void DoNotDeclareTheSameName()

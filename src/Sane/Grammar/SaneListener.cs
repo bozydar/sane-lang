@@ -86,6 +86,18 @@ public interface ISaneListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitNumericAtomExp([NotNull] SaneParser.NumericAtomExpContext context);
 	/// <summary>
+	/// Enter a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterStringAtomExp([NotNull] SaneParser.StringAtomExpContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitStringAtomExp([NotNull] SaneParser.StringAtomExpContext context);
+	/// <summary>
 	/// Enter a parse tree produced by the <c>mulDivExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>

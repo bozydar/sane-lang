@@ -26,6 +26,8 @@ expression
         #function
     | value=NUMBER                                    
         #numericAtomExp
+    | value=ESCAPED_STRING  
+        #stringAtomExp
     | ID
         #idAtomExp;
 
@@ -51,6 +53,7 @@ NUMBER              : DIGIT+ ('.' DIGIT+)?;
 WHITESPACE          : [ \n\t\r]+ -> skip;
 SingleLineComment   : '//' ~[\r\n\u2028\u2029]* -> channel(HIDDEN);
 
+ESCAPED_STRING      : '"' ( '""' | ~["] )* '"';
 fragment LETTER     : [a-zA-Z]+ ;
 fragment DIGIT      : [0-9]+ ;
 

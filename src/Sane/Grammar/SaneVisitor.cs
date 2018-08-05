@@ -65,6 +65,13 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitNumericAtomExp([NotNull] SaneParser.NumericAtomExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>stringAtomExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitStringAtomExp([NotNull] SaneParser.StringAtomExpContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>mulDivExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
