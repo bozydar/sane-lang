@@ -28,7 +28,7 @@ namespace Sane.Test.Sane
             const string js = @"
 A = {};
 ";
-            ScriptAssert.Equal("Warning:N/A: Module `A` is empty.", subject.Errors.GetErrorsString());
+            ScriptAssert.Equal("Warning:N/A: Module `A` is empty.", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
         
@@ -65,14 +65,14 @@ A = {};
 A.a = ""dupa"";
 A.b = 1;
 ";
-            ScriptAssert.Equal("", subject.Errors.GetErrorsString());
+            ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
         
         [Fact]
         public void ErrorWhenBindingToTheSameName()
         {
-            var subject = new JsOutputVisitor(new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
+            var subject = new JsOutputVisitor(config: new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
             var module = new ModuleNode
             {
                 Id = "A",
@@ -104,7 +104,7 @@ A.b = 1;
         [Fact]
         public void VisitFunc()
         {
-            var subject = new JsOutputVisitor(new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
+            var subject = new JsOutputVisitor(config: new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
             var module = new ModuleNode
             {
                 Id = "A",
@@ -144,14 +144,14 @@ return ""dupa"" + ""zimna"";
 };
 ";
             var result = subject.Visit(module);
-            ScriptAssert.Equal("", subject.Errors.GetErrorsString());
+            ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
         
         [Fact]
         public void VisitList()
         {
-            var subject = new JsOutputVisitor(new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
+            var subject = new JsOutputVisitor(config: new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
             var module = new ModuleNode
             {
                 Id = "A",
