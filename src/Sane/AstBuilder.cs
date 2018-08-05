@@ -41,7 +41,7 @@ namespace Sane {
             var expr = VisitChildren(context) as ExprNode;
             return new LetNode
             {
-                Name = variableName,
+                Id = variableName,
                 Expr = expr,
                 Token = context.bindingName
             };

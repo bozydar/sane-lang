@@ -4,12 +4,11 @@ namespace Sane.Semantics
 {
     public class CompilationException : Exception
     {
-        private readonly Errors _errors;
-        public Errors Errors => _errors;
+        public Errors Errors { get; }
 
-        public CompilationException(Errors errors)
+        public CompilationException(Errors errors) : base(errors.GetErrorsString())
         {
-            _errors = errors;
+            Errors = errors;
         }
     }
 }

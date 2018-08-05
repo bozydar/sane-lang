@@ -15,13 +15,12 @@ namespace Sane
         public JsOutputVisitor(Errors errorsSink = null, InstanceConfig config = null) 
             : base(errorsSink)
         {
-            _config = config ?? new InstanceConfig();
+            Config = config ?? new InstanceConfig();
         }
 
-        private InstanceConfig _config;
-        public InstanceConfig Config => _config;
+        public InstanceConfig Config { get; }
         
-        protected Scope _scope = new Scope(null);
+        private Scope Scope = new Scope(null);
         
         public override string Visit(ModuleNode node)
         {
@@ -29,24 +28,24 @@ namespace Sane
             {
                 AddError(Error.ErrorLevel.Warning, node, $"Module `{node.Id}` is empty.");
             }
-            _scope = _scope.CreateChildScope(node);
+            Scope = Scope.CreateChildScope(node);
             var lets = node.Lets.Aggregate("", (acc, let) => acc + Visit(let) + ";");            
             return $"{node.Id} = {{}};\n{lets}\n";
         }
 
         public override string Visit(LetNode node)
         {            
-            var symbol = _scope.FindVariableInCurrent(node.Name);
+            var symbol = Scope.FindVariableInCurrent(node.Id);
             if (symbol != null)
             {
-                AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Name}` already exists.");
+                AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` already exists.");
             }
-            _scope.AddVariable(node.Name, node.Expr);
-            var left = VariablePath(node.Name);
+            Scope.AddVariable(node.Id, node.Expr);
+            var left = VariablePath(node.Id);
             var right = Visit(node.Expr);
             if (right == null)
             {
-                AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Name}` has no value defined.");
+                AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` has no value defined.");
             }
             Console.WriteLine("HERE");
             return $"{left} = {right}";
@@ -59,7 +58,7 @@ namespace Sane
                 name
             };
             
-            var scope = _scope;
+            var scope = Scope;
             while (scope != null)
             {
                 Console.WriteLine("node");
@@ -120,9 +119,27 @@ namespace Sane
 
         public override string Visit(FuncNode node)
         {
+            var parameters = string.Join(", ", node.Parameters.Select(param => param.Id));            
+            Scope = Scope.CreateChildScope(node);
+            foreach (var param in node.Parameters)
+            {
+                Scope.AddVariable(param.Id, param);
+            }
             var body = Visit(node.Body);
-            var parameters = string.Join(", ", node.Parameters);
-            return $"function ({parameters}) {{\nreturn {body};\n}}";
+            
+            var result = $"function ({parameters}) {{\nreturn {body};\n}}";
+            Scope = Scope.Parent;
+            return result;
+        }
+
+        public override string Visit(ReferenceNode node)
+        {
+            var symbol = Scope.FindVariable(node.Id);
+            if (symbol == null)
+            {
+                AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` doesn't exist.");
+            }
+            return VariablePath(node.Id);
         }
     }
 }

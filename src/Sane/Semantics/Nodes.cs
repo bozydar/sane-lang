@@ -18,7 +18,7 @@ namespace Sane.Semantics
 
     public class LetNode : BaseNode
     {
-        public string Name { get; set; }
+        public string Id { get; set; }
         public ExprNode Expr { get; set; }
     }
 
@@ -31,6 +31,11 @@ namespace Sane.Semantics
     {
         public string Id { get; set; }
         public IList<ExprNode> Parameters { get; set; }
+    }
+
+    public class ReferenceNode : ExprNode
+    {
+        public string Id { get; set; }
     }
 
     public class BinaryExprNode : ExprNode
@@ -52,8 +57,13 @@ namespace Sane.Semantics
 
     public class FuncNode : ExprNode
     {
-        public IList<string> Parameters { get; set; }
+        public IList<ParamNode> Parameters { get; set; }
         public ExprNode Body { get; set; }
+    }
+
+    public class ParamNode : BaseNode
+    {
+        public string Id { get; set; }
     }
 
     public class ListNode : ExprNode

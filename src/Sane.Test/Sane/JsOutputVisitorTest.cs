@@ -22,7 +22,7 @@ namespace Sane.Test.Sane
             var subject = new JsOutputVisitor();
             var module = new ModuleNode
             {
-                Id = "A"                
+                Id = "A"
             };
             var result = subject.Visit(module);
             const string js = @"
@@ -31,7 +31,7 @@ A = {};
             ScriptAssert.Equal("Warning:N/A: Module `A` is empty.", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
-        
+
         [Fact]
         public void VisitLet()
         {
@@ -43,7 +43,7 @@ A = {};
                 {
                     new LetNode
                     {
-                        Name = "a",
+                        Id = "a",
                         Expr = new StringNode
                         {
                             Value = "dupa"
@@ -51,7 +51,7 @@ A = {};
                     },
                     new LetNode
                     {
-                        Name = "b",
+                        Id = "b",
                         Expr = new NumericNode
                         {
                             Value = 1
@@ -68,7 +68,7 @@ A.b = 1;
             ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
-        
+
         [Fact]
         public void ErrorWhenBindingToTheSameName()
         {
@@ -80,7 +80,7 @@ A.b = 1;
                 {
                     new LetNode
                     {
-                        Name = "a",
+                        Id = "a",
                         Expr = new StringNode
                         {
                             Value = "dupa"
@@ -88,19 +88,19 @@ A.b = 1;
                     },
                     new LetNode
                     {
-                        Name = "a",
+                        Id = "a",
                         Expr = new NumericNode
                         {
                             Value = 1
                         }
                     }
                 }
-            }; 
+            };
             var ex = Record.Exception(() => subject.Visit(module)) as CompilationException;
-            
+
             ScriptAssert.Equal("Error:N/A: Variable `a` already exists.", ex.Errors.GetErrorsString());
         }
-        
+
         [Fact]
         public void VisitFunc()
         {
@@ -112,42 +112,66 @@ A.b = 1;
                 {
                     new LetNode
                     {
-                        Name = "f",
+                        Id = "out",
+                        Expr = new NumericNode
+                        {
+                            Value = 10
+                        }
+                    },
+                    new LetNode
+                    {
+                        Id = "f",
                         Expr = new FuncNode
                         {
-                            Parameters = new List<string>
+                            Parameters = new List<ParamNode>
                             {
-                                "arg0", "arg1"                                
-                            }, 
-                            Body   = new BinaryExprNode
+                                new ParamNode
+                                {
+                                    Id = "arg0"
+                                },
+                                new ParamNode
+                                {
+                                    Id = "arg1"
+                                }
+                            },
+                            Body = new BinaryExprNode
                             {
                                 Id = "+",
                                 Left = new StringNode
                                 {
                                     Value = "dupa"
-                                },
-                                Right = new StringNode
+                                },                                
+                                Right = new BinaryExprNode
                                 {
-                                    Value = "zimna"
-                                }
-                            } 
-                                
-                        }                        
+                                    Id = "+",
+                                    Left = new ReferenceNode
+                                    {
+                                        Id = "arg0"
+                                    },
+                                    Right = new ReferenceNode
+                                    {
+                                        Id = "out"
+                                    }
+                                } 
+                                    
+                            }
+                        }
                     }
                 }
-            }; 
+            };
 
             const string js = @"
 A = {};
+A.out = 10;
 A.f = function (arg0, arg1) {
-return ""dupa"" + ""zimna"";
+return ""dupa"" + arg0 + A.out;
 };
 ";
             var result = subject.Visit(module);
             ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
-        
+
         [Fact]
         public void VisitList()
         {
@@ -159,7 +183,7 @@ return ""dupa"" + ""zimna"";
                 {
                     new LetNode
                     {
-                        Name = "a",
+                        Id = "a",
                         Expr = new StringNode
                         {
                             Value = "dupa"
@@ -167,16 +191,16 @@ return ""dupa"" + ""zimna"";
                     },
                     new LetNode
                     {
-                        Name = "a",
+                        Id = "a",
                         Expr = new NumericNode
                         {
                             Value = 1
                         }
                     }
                 }
-            }; 
+            };
             var ex = Record.Exception(() => subject.Visit(module)) as CompilationException;
-            
+
             ScriptAssert.Equal("Error:N/A: Variable `a` already exists.", ex.Errors.GetErrorsString());
         }
     }

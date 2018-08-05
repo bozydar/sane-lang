@@ -34,20 +34,6 @@ A.y = ""dupa \""dupa\"" "";
             ScriptAssert.Equal(js, "", subject.Translate(sane));
         }
 //        
-//        [Fact]        
-//        public void DoNotDeclareTheSameName()
-//        {
-//            var subject = new Compiler();
-//            const string sane = @"
-//            module A
-//                let x = 1
-//                let x = 2
-//            end
-//";
-//            
-//            ScriptAssert.EqualErrors("Variable `x` already declared at 3:16 near `let`" , subject.Translate(sane));
-//        }
-//        
 //        [Fact]
 //        public void DeclareOperations()
 //        {

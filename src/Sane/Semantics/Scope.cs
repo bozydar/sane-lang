@@ -5,7 +5,7 @@ namespace Sane.Semantics
 {
     public class Scope
     {                
-        private readonly IDictionary<string, Symbol<ExprNode>> _variables = new Dictionary<string, Symbol<ExprNode>>();
+        private readonly IDictionary<string, Symbol<BaseNode>> _variables = new Dictionary<string, Symbol<BaseNode>>();
         private Scope _parent;
         public Scope Parent => _parent;
         
@@ -18,12 +18,12 @@ namespace Sane.Semantics
             _node = node;
         }
 
-        public void AddVariable(string name, ExprNode expression)
+        public void AddVariable(string name, BaseNode expression)
         {
-            _variables.Add(name, new Symbol<ExprNode>(name, expression));
+            _variables.Add(name, new Symbol<BaseNode>(name, expression));
         }
 
-        public Symbol<ExprNode> FindVariable(string name)
+        public Symbol<BaseNode> FindVariable(string name)
         {
             if (_variables.ContainsKey(name))
             {
@@ -33,7 +33,7 @@ namespace Sane.Semantics
             return _parent?.FindVariable(name);
         }
 
-        public Symbol<ExprNode> FindVariableInCurrent(string name)
+        public Symbol<BaseNode> FindVariableInCurrent(string name)
         {
             if (_variables.ContainsKey(name))
             {
