@@ -40,8 +40,8 @@ namespace Sane
             {
                 AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` already exists.");
             }
-            Scope.AddVariable(node.Id, node.Expr);
-            var left = VariablePath(node.Id);
+            symbol = Scope.AddVariable(node.Id, node.Expr);
+            var left = symbol.AbsoluteName();
             var right = Visit(node.Expr);
             if (right == null)
             {
@@ -49,30 +49,6 @@ namespace Sane
             }
             Console.WriteLine("HERE");
             return $"{left} = {right}";
-        }
-
-        private string VariablePath(string name)
-        {            
-            var result = new List<string>
-            {
-                name
-            };
-            
-            var scope = Scope;
-            while (scope != null)
-            {
-                Console.WriteLine("node");
-                Console.WriteLine(scope.Node);
-                if (scope.Node is ModuleNode node)
-                {
-                    result.Add(node.Id);
-                }
-
-                scope = scope.Parent;
-            }
-
-            result.Reverse();
-            return string.Join(".", result);
         }
 
         public override string Visit(ExprNode node)
@@ -139,7 +115,8 @@ namespace Sane
             {
                 AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` doesn't exist.");
             }
-            return VariablePath(node.Id);
+            
+            return symbol.AbsoluteName();
         }
     }
 }

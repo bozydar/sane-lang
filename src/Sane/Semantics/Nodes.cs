@@ -4,16 +4,21 @@ using System.Linq.Expressions;
 using Antlr4.Runtime;
 
 namespace Sane.Semantics
-{   
+{
+    public interface IScopeProviding
+    {
+        string ScopeName { get; } 
+    }
     public abstract class BaseNode
     {
         public IToken Token { get; set; }
     }
     
-    public class ModuleNode : BaseNode
+    public class ModuleNode : BaseNode, IScopeProviding
     {
         public string Id { get; set; }
         public IList<LetNode> Lets { get; set; } = new List<LetNode>();
+        public string ScopeName => Id;
     }
 
     public class LetNode : BaseNode

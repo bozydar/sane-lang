@@ -1,17 +1,33 @@
-﻿namespace Sane.Semantics
+﻿using System.Linq;
+
+namespace Sane.Semantics
 {
     public class Symbol<TNodeType> where TNodeType : BaseNode
     {
-        private string _name;
-        public string Name => _name;
+        public string Name { get; }
+        public TNodeType Node { get; }
+        public Scope Scope { get; }
         
-        private readonly TNodeType _node;
-        public TNodeType Node => _node;
-        
-        public Symbol(string name, TNodeType node)
+        public Symbol(string name, TNodeType node, Scope scope)
         {
-            _name = name;
-            _node = node;
+            Name = name;
+            Node = node;
+            Scope = scope;
+        }
+
+        public string AbsoluteName()
+        {
+            if (Node is ParamNode)
+            {
+                return Name;
+            }
+            var modulePath = Scope.Ancestry(true)
+                .Where(scope => scope.Name != null)
+                .Select(scope => scope.Name)
+                .Reverse()
+                .ToList();
+            modulePath.Add(Name);
+            return string.Join(".", modulePath);
         }
     }
 }

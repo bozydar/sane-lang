@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Sane.Semantics
 {
     public class Scope
     {                
         private readonly IDictionary<string, Symbol<BaseNode>> _variables = new Dictionary<string, Symbol<BaseNode>>();
-        private Scope _parent;
-        public Scope Parent => _parent;
+        public Scope Parent { get; }
         
-        private BaseNode _node;
-        public BaseNode Node => _node;
+        public BaseNode Node { get; }
+        
+        public string Name { get; }
 
         public Scope(BaseNode node, Scope parent = null)
         {
-            _parent = parent;
-            _node = node;
+            Parent = parent;
+            Node = node;
+            Name = (node as IScopeProviding)?.ScopeName;
         }
 
-        public void AddVariable(string name, BaseNode expression)
+        public Symbol<BaseNode> AddVariable(string name, BaseNode node)
         {
-            _variables.Add(name, new Symbol<BaseNode>(name, expression));
+            var symbol = new Symbol<BaseNode>(name, node, this);
+            _variables.Add(name, symbol);
+            return symbol;
         }
 
         public Symbol<BaseNode> FindVariable(string name)
@@ -30,7 +34,7 @@ namespace Sane.Semantics
                 return _variables[name]; 
             }
 
-            return _parent?.FindVariable(name);
+            return Parent?.FindVariable(name);
         }
 
         public Symbol<BaseNode> FindVariableInCurrent(string name)
@@ -47,6 +51,16 @@ namespace Sane.Semantics
         {
             Console.WriteLine($"new scope for {node}");
             return new Scope(node, this);
+        }
+
+        public IEnumerable<Scope> Ancestry(bool includingThis = false)
+        {
+            var scope = includingThis ? this : Parent;
+            while (scope != null)
+            {
+                yield return scope;
+                scope = scope.Parent;
+            }
         }
     }
 }
