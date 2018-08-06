@@ -173,6 +173,69 @@ return ""dupa"" + arg0 + A.out;
         }
 
         [Fact]
+        public void VisitLetInNode()
+        {
+            var subject = new JsOutputVisitor(config: new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
+            var module = new ModuleNode
+            {
+                Id = "A",
+                Lets = new List<LetNode>
+                {
+                    new LetNode
+                    {
+                        Id = "evalNow",
+                        Expr = new LetInNode
+                        {
+                            Lets = new List<LetNode>
+                            {
+                                new LetNode
+                                {
+                                    Id = "a",
+                                    Expr = new NumericNode
+                                    {
+                                        Value = 1
+                                    }
+                                },
+                                new LetNode
+                                {
+                                    Id = "b",
+                                    Expr = new NumericNode
+                                    {
+                                        Value = 2
+                                    }
+                                }
+                            },
+                            Body = new BinaryExprNode
+                            {
+                                Id = "+",
+                                Left = new ReferenceNode
+                                {
+                                    Id = "a"
+                                },
+                                Right = new ReferenceNode
+                                {
+                                    Id = "b"
+                                }
+                            }
+                        }
+                    }                    
+                }
+            };
+
+            const string js = @"
+A = {};
+A.evalNow = function () {
+var a = 1;
+var b = 2;
+return a + b;
+}();
+";
+            var result = subject.Visit(module);
+            ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
+            ScriptAssert.Equal(js, result);
+        }
+
+        [Fact]
         public void VisitList()
         {
             var subject = new JsOutputVisitor(config: new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});

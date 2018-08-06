@@ -23,6 +23,7 @@ namespace Sane.Semantics
         public abstract T Visit(BinaryExprNode node); 
         public abstract T Visit(FuncNode node);
         public abstract T Visit(ReferenceNode node);
+        public abstract T Visit(LetInNode node);
 
         public AstVisitor(Errors errorsSink = null)
         {

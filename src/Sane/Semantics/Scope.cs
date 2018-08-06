@@ -6,7 +6,7 @@ namespace Sane.Semantics
 {
     public class Scope
     {                
-        private readonly IDictionary<string, Symbol<BaseNode>> _variables = new Dictionary<string, Symbol<BaseNode>>();
+        private IDictionary<string, Symbol<BaseNode>> Variables { get; } = new Dictionary<string, Symbol<BaseNode>>();
         public Scope Parent { get; }
         
         public BaseNode Node { get; }
@@ -23,15 +23,15 @@ namespace Sane.Semantics
         public Symbol<BaseNode> AddVariable(string name, BaseNode node)
         {
             var symbol = new Symbol<BaseNode>(name, node, this);
-            _variables.Add(name, symbol);
+            Variables.Add(name, symbol);
             return symbol;
         }
 
         public Symbol<BaseNode> FindVariable(string name)
         {
-            if (_variables.ContainsKey(name))
+            if (Variables.ContainsKey(name))
             {
-                return _variables[name]; 
+                return Variables[name]; 
             }
 
             return Parent?.FindVariable(name);
@@ -39,9 +39,9 @@ namespace Sane.Semantics
 
         public Symbol<BaseNode> FindVariableInCurrent(string name)
         {
-            if (_variables.ContainsKey(name))
+            if (Variables.ContainsKey(name))
             {
-                return _variables[name]; 
+                return Variables[name]; 
             }
 
             return null;
@@ -49,8 +49,8 @@ namespace Sane.Semantics
 
         public Scope CreateChildScope(BaseNode node)
         {
-            Console.WriteLine($"new scope for {node}");
-            return new Scope(node, this);
+            var result = new Scope(node, this);
+            return result;
         }
 
         public IEnumerable<Scope> Ancestry(bool includingThis = false)

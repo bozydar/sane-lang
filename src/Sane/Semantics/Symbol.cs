@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace Sane.Semantics
 {
@@ -17,7 +18,7 @@ namespace Sane.Semantics
 
         public string AbsoluteName()
         {
-            if (Node is ParamNode)
+            if (Scope.Name == null)
             {
                 return Name;
             }

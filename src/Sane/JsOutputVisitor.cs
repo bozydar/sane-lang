@@ -30,7 +30,9 @@ namespace Sane
             }
             Scope = Scope.CreateChildScope(node);
             var lets = node.Lets.Aggregate("", (acc, let) => acc + Visit(let) + ";");            
-            return $"{node.Id} = {{}};\n{lets}\n";
+            var result = $"{node.Id} = {{}};\n{lets}\n";
+            Scope = Scope.Parent;
+            return result;
         }
 
         public override string Visit(LetNode node)
@@ -40,23 +42,20 @@ namespace Sane
             {
                 AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` already exists.");
             }
-            symbol = Scope.AddVariable(node.Id, node.Expr);
+            symbol = Scope.AddVariable(node.Id, node);
             var left = symbol.AbsoluteName();
+
             var right = Visit(node.Expr);
             if (right == null)
             {
                 AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` has no value defined.");
             }
-            Console.WriteLine("HERE");
             return $"{left} = {right}";
         }
 
         public override string Visit(ExprNode node)
         {
             dynamic arg = node;
-            Console.WriteLine("arg");
-            Console.WriteLine(arg);
-            Console.WriteLine("-----");
             return Visit(arg);            
         }
 
@@ -117,6 +116,22 @@ namespace Sane
             }
             
             return symbol.AbsoluteName();
+        }
+
+        public override string Visit(LetInNode node)
+        {
+            Scope = Scope.CreateChildScope(node);
+            
+            var lets = node.Lets
+                .Select(let => $"var {Visit(let)};\n")
+                .ToArray();
+            var letsExprs = string.Join("", lets);
+            var body = Visit(node.Body);            
+            var result = $"function () {{\n{letsExprs}\nreturn {body};\n}}()"; 
+            
+            Scope = Scope.Parent;
+            
+            return result;
         }
     }
 }
