@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Net.Security;
+using System.Reflection.Metadata.Ecma335;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
@@ -31,50 +32,73 @@ namespace Sane {
             {
                 Id = id,
                 Lets = lets,
-                Token = context.moduleName 
+                Token = context.Start 
             };
         }
 
         public override BaseNode VisitLet(SaneParser.LetContext context)
         {
             var variableName = context.bindingName.Text;
-            var expr = VisitChildren(context) as ExprNode;
+            var expr = Visit(context.expression()) as ExprNode;
             return new LetNode
             {
                 Id = variableName,
                 Expr = expr,
-                Token = context.bindingName
+                Token = context.Start
+            };
+        }
+
+        public override BaseNode VisitLetsInExp(SaneParser.LetsInExpContext context)
+        {
+            var expr = Visit(context.body) as ExprNode;
+            var lets = context.let()
+                .Select(VisitLet)
+                .Cast<LetNode>()
+                .ToList();
+            return new LetInNode
+            {
+                Lets = lets,
+                Body = expr,
+                Token = context.Start
             };
         }
 
         public override BaseNode VisitParenthesisExp(SaneParser.ParenthesisExpContext context)
         {
-            return VisitChildren(context);            
+            return Visit(context.body);            
         }
 
         public override BaseNode VisitAddSubExp(SaneParser.AddSubExpContext context)
         {
-            var left =  VisitChildren(context.left) as ExprNode;
-            var right =  VisitChildren(context.right) as ExprNode;
+            var left =  Visit(context.left) as ExprNode;
+            var right =  Visit(context.right) as ExprNode;
+            if (left == null)
+            {
+                AddError(Error.ErrorLevel.Error, context.Start, "Left expression not detected");
+            }
+            if (right == null)
+            {
+                AddError(Error.ErrorLevel.Error, context.Start, "Right expression not detected");
+            }
             return new BinaryExprNode
             {
                 Id = context.operation.Text,
                 Left = left,
                 Right = right,
-                Token = context.operation
+                Token = context.Start
             };
         }
 
         public override BaseNode VisitMulDivExp(SaneParser.MulDivExpContext context)
         {
-            var left =  VisitChildren(context.left) as ExprNode;
-            var right =  VisitChildren(context.right) as ExprNode;
+            var left =  Visit(context.left) as ExprNode;
+            var right =  Visit(context.right) as ExprNode;
             return new BinaryExprNode
             {
                 Id = context.operation.Text,
                 Left = left,
                 Right = right,
-                Token = context.operation
+                Token = context.Start
             };
         }
 
@@ -88,7 +112,7 @@ namespace Sane {
             return new NumericNode
             {
                 Value = value,
-                Token = context.value
+                Token = context.Start
             };
         }
 
@@ -98,7 +122,17 @@ namespace Sane {
             return new StringNode
             {
                 Value = value,
-                Token = context.value
+                Token = context.Start
+            };
+        }
+
+        public override BaseNode VisitIdAtomExp(SaneParser.IdAtomExpContext context)
+        {
+            var id = context.id.Text;
+            return new ReferenceNode
+            {
+                Id = id,
+                Token = context.Start
             };
         }
 

@@ -23,8 +23,8 @@ namespace Sane.Test.Sane
             var subject = new Compiler();
             const string sane = @"
             module A
-                let x = 1
-                let y = ""dupa """"dupa"""" ""
+                x = 1
+                y = ""dupa """"dupa"""" ""
             end";
 
             const string js = @"A = {};
@@ -33,6 +33,32 @@ A.y = ""dupa \""dupa\"" "";
 ";
             ScriptAssert.Equal(js, "", subject.Translate(sane));
         }
+        
+        [Fact]
+        public void DeclareLetIn()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                x = 
+                    let
+                        a = 1
+                        b = 2
+                    in
+                        a + b
+                    end
+            end";
+
+            const string js = @"A = {};
+A.x = function () {
+var a = 1;
+var b = 2;
+return a + b;
+}();
+";
+            ScriptAssert.Equal(js, "", subject.Translate(sane));
+        }
+        
 //        
 //        [Fact]
 //        public void DeclareOperations()

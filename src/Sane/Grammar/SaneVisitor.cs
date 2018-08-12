@@ -100,6 +100,13 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitIdAtomExp([NotNull] SaneParser.IdAtomExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>letsInExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLetsInExp([NotNull] SaneParser.LetsInExpContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>addSubExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>

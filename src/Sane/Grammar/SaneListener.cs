@@ -146,6 +146,18 @@ public interface ISaneListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitIdAtomExp([NotNull] SaneParser.IdAtomExpContext context);
 	/// <summary>
+	/// Enter a parse tree produced by the <c>letsInExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterLetsInExp([NotNull] SaneParser.LetsInExpContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>letsInExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitLetsInExp([NotNull] SaneParser.LetsInExpContext context);
+	/// <summary>
 	/// Enter a parse tree produced by the <c>addSubExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>

@@ -14,7 +14,7 @@ namespace Sane.Semantics
 
         protected string FormatToken(IToken token)
         {
-            return token == null ? "N/A" : $"{token.Line}:{token.Column}";
+            return token == null ? "N/A" : $"{token.Line}:{token.Column} `{token.Text}`";
         }   
     }
 }

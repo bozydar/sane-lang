@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
@@ -24,28 +24,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Debug|x64.ActiveCfg = Debug|x64
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Debug|x64.Build.0 = Debug|x64
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Debug|x86.ActiveCfg = Debug|x86
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Debug|x86.Build.0 = Debug|x86
 		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Release|x64.ActiveCfg = Release|x64
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Release|x64.Build.0 = Release|x64
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Release|x86.ActiveCfg = Release|x86
-		{CC19FBE9-1884-45EC-A8C8-C892F4F53425}.Release|x86.Build.0 = Release|x86
 		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Debug|x64.ActiveCfg = Debug|x64
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Debug|x64.Build.0 = Debug|x64
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Debug|x86.ActiveCfg = Debug|x86
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Debug|x86.Build.0 = Debug|x86
 		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Release|x64.ActiveCfg = Release|x64
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Release|x64.Build.0 = Release|x64
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Release|x86.ActiveCfg = Release|x86
-		{B7AF6286-FBEF-4BF6-A6C3-C1DE9643FA33}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CC19FBE9-1884-45EC-A8C8-C892F4F53425} = {87B6BE25-FD30-4F43-A57B-9A009DC722DE}

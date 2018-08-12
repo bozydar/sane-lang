@@ -8,14 +8,16 @@ module
     : 'module' moduleName=ID  (declaration|let)* 'end';
     
 let
-    : 'let' bindingName=ID '=' expression;
+    : bindingName=ID '=' expression;
     
 parameter
     : ID;
 
 expression 
-    : '(' expression ')'                        
+    : '(' body=expression ')'                        
         #parenthesisExp
+    | 'let' lets=let* 'in' body=expression 'end'
+        #letsInExp
     | left=expression operation=(ASTERISK|SLASH) right=expression    
         #mulDivExp
     | left=expression operation=(PLUS|MINUS) right=expression        
@@ -28,7 +30,7 @@ expression
         #numericAtomExp
     | value=ESCAPED_STRING  
         #stringAtomExp
-    | ID
+    | id=ID
         #idAtomExp;
 
 declaration

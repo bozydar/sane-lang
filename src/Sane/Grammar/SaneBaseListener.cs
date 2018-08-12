@@ -170,6 +170,20 @@ public partial class SaneBaseListener : ISaneListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitIdAtomExp([NotNull] SaneParser.IdAtomExpContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by the <c>letsInExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterLetsInExp([NotNull] SaneParser.LetsInExpContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>letsInExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitLetsInExp([NotNull] SaneParser.LetsInExpContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by the <c>addSubExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>
