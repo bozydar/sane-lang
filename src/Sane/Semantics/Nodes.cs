@@ -33,9 +33,9 @@ namespace Sane.Semantics
     }
 
     public class CallNode : ExprNode
-    {
-        public string Id { get; set; }
+    {        
         public IList<ExprNode> Parameters { get; set; }
+        public ExprNode Expr { get; set; }
     }
 
     public class ReferenceNode : ExprNode

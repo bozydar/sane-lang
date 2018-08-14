@@ -59,23 +59,24 @@ return a + b;
             ScriptAssert.Equal(js, "", subject.Translate(sane));
         }
         
-//        
-//        [Fact]
-//        public void DeclareOperations()
-//        {
-//            var subject = new Compiler();
-//            const string sane = @"
-//            module A
-//                let x = 1
-//                let y = (x + 1) * 2 - 3 / 4    
-//            end";
-//
-//            const string js = @"A = {};
-//A.x = 1;
-//A.y = (A.x + 1) * 2 - 3 / 4;
-//";
-//            ScriptAssert.Equal(js, "", subject.Translate(sane));
-//        }
+        [Fact]
+        public void DeclareOperations()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                let x = 1
+                let y = x + 1 * 2 - 3 / 4    
+                let z = (x + 1) * (2 - 3) / 4    
+            end";
+
+            const string js = @"A = {};
+A.x = 1;
+A.y = A.x + (1 * 2) - (3 / 4);
+A.z = A.x + 1 * (2 - 3) / 4;
+";
+            ScriptAssert.Equal(js, "", subject.Translate(sane));
+        }
 //        
 //        
 //        [Fact]

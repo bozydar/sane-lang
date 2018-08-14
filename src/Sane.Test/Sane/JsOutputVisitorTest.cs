@@ -140,7 +140,7 @@ A.b = 1;
                                 Left = new StringNode
                                 {
                                     Value = "dupa"
-                                },                                
+                                },
                                 Right = new BinaryExprNode
                                 {
                                     Id = "+",
@@ -152,8 +152,7 @@ A.b = 1;
                                     {
                                         Id = "out"
                                     }
-                                } 
-                                    
+                                }
                             }
                         }
                     }
@@ -218,7 +217,7 @@ return ""dupa"" + arg0 + A.out;
                                 }
                             }
                         }
-                    }                    
+                    }
                 }
             };
 
@@ -229,6 +228,105 @@ var a = 1;
 var b = 2;
 return a + b;
 }();
+";
+            var result = subject.Visit(module);
+            ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
+            ScriptAssert.Equal(js, result);
+        }
+
+        [Fact]
+        public void VisitCall()
+        {
+            var subject = new JsOutputVisitor(config: new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
+            var module = new ModuleNode
+            {
+                Id = "A",
+                Lets = new List<LetNode>
+                {
+                    new LetNode
+                    {
+                        Id = "f",
+                        Expr = new FuncNode
+                        {
+                            Parameters = new List<ParamNode>
+                            {
+                                new ParamNode
+                                {
+                                    Id = "arg0"
+                                },
+                                new ParamNode
+                                {
+                                    Id = "arg1"
+                                }
+                            },
+                            Body = new BinaryExprNode
+                            {
+                                Id = "+",
+                                Left = new ReferenceNode
+                                {
+                                    Id = "arg0"
+                                },
+                                Right = new ReferenceNode
+                                {
+                                    Id = "arg1"
+                                }
+                            }
+                        }
+                    },
+                    new LetNode
+                    {
+                        Id = "main",
+                        Expr = new FuncNode
+                        {           
+                            Parameters = new List<ParamNode>(),
+                            Body = new LetInNode
+                            {
+                                Lets = new List<LetNode>
+                                {
+                                    new LetNode
+                                    {
+                                        Id = "x",
+                                        Expr = new NumericNode
+                                        {
+                                            Value = 1
+                                        }
+                                    }
+                                },
+                                Body = new CallNode
+                                {
+                                    Expr = new ReferenceNode
+                                    {
+                                        Id = "f"
+                                    },
+                                    Parameters = new List<ExprNode>
+                                    {
+                                        new ReferenceNode
+                                        {
+                                            Id = "x"
+                                        },
+                                        new NumericNode
+                                        {
+                                            Value = 2
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            const string js = @"
+A = {};
+A.f = function (arg0, arg1) {
+return arg0 + arg1;
+};
+A.main = function () {
+return function () {
+var x = 1;
+return A.f(x, 2);
+}();
+};
 ";
             var result = subject.Visit(module);
             ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());

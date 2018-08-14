@@ -62,7 +62,10 @@ namespace Sane
 
         public override string Visit(CallNode node)
         {
-            throw new System.NotImplementedException();
+            var expr = Visit(node.Expr);
+            var parameters = string.Join(", ", node.Parameters.Select(Visit));
+            
+            return $"{expr}({parameters})";
         }
 
         public override string Visit(StringNode node)
@@ -90,7 +93,19 @@ namespace Sane
             var left = Visit(node.Left);
             var right = Visit(node.Right);
             var op = node.Id;
-            return $"{left} {op} {right}";
+            // TODO To dziala ale jest malo eleganckie. Zastanowic sie
+            // 1. Wywolywac funkcje "add" - bedzie wygladac slabo w kodzie
+            // 2. Sprawdzac otocznie - niestety brak referencji do ownerow ale sa do childow
+            // 3. Poszperac w ANTLR czy nie ma czegos do takiej sytuacji 
+            switch (op)
+            {
+                case "-":
+                case "+":
+                    return $"({left} {op} {right})";
+                default:
+                    return $"{left} {op} {right}";
+            }
+            
         }
 
         public override string Visit(FuncNode node)
