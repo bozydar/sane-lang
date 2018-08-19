@@ -18,11 +18,32 @@ expression
         #parenthesisExp
     | 'let' lets=let* 'in' body=expression 'end'
         #letsInExp
+    | (PLUS|MINUS) right=expression
+        #leftPlusMinus
     | left=expression operation=(ASTERISK|SLASH) right=expression    
         #mulDivExp
     | left=expression operation=(PLUS|MINUS) right=expression        
         #addSubExp
-    | funcName=ID '(' expressions=expression* ')'
+    | left=expression operation=('>'|'<'|'>='|'<='|'=='|'!=') right=expression
+        #compareExp
+    | '!' right=expression
+        #notExpr
+    | left=expression '&&' right=expression
+        #andExpr
+    | left=expression '||' right=expression
+        #orExpr
+    // maybe to introduce capturing: left |> & right(a &1 c)  ==> ((_a1) -> right(a _a1 c))(left)
+    // it would require to introduce a new operator '&' right=expression
+    // Tu rodzi się pytanie, czy to ma być bardziej haskell czy Elixir, ponieważ analiza typu może być
+    // w tym przypadku megabolesna. Jeżeli będzie implicit currying nie ma sprawy ale wycinanie ze  środka?! 
+    // left |> right(a b c)  --> right(left a b c) |
+    // left |> right  --> right(left)
+    // TODO special syntax  
+    | left=expression ('|>'|'<|') right=expression
+        #pipeExpr     
+    | left=expression ('>>'|'<<') right=expression
+        #composeExpr        
+    | callable=expression '{' arguments=expression* '}'
         #call
     | '(' parameters=parameter* ')' '->' body=expression
         #function
@@ -34,7 +55,8 @@ expression
         #idAtomExp;
 
 declaration
-    : ID ':' type;
+    : 'foreign' ID ':' type 
+    | ID ':' type;
 
 type
     : '(' type+ ')'                        

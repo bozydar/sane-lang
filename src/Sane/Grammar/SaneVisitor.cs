@@ -51,12 +51,12 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitParameter([NotNull] SaneParser.ParameterContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>call</c>
+	/// Visit a parse tree produced by the <c>pipeExpr</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitCall([NotNull] SaneParser.CallContext context);
+	Result VisitPipeExpr([NotNull] SaneParser.PipeExprContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>numericAtomExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
@@ -65,6 +65,62 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitNumericAtomExp([NotNull] SaneParser.NumericAtomExpContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>mulDivExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMulDivExp([NotNull] SaneParser.MulDivExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>leftPlusMinus</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLeftPlusMinus([NotNull] SaneParser.LeftPlusMinusContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>orExpr</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOrExpr([NotNull] SaneParser.OrExprContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>idAtomExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitIdAtomExp([NotNull] SaneParser.IdAtomExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>addSubExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAddSubExp([NotNull] SaneParser.AddSubExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>compareExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCompareExp([NotNull] SaneParser.CompareExpContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>call</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCall([NotNull] SaneParser.CallContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>notExpr</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNotExpr([NotNull] SaneParser.NotExprContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>stringAtomExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
@@ -72,12 +128,12 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitStringAtomExp([NotNull] SaneParser.StringAtomExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>mulDivExp</c>
+	/// Visit a parse tree produced by the <c>composeExpr</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitMulDivExp([NotNull] SaneParser.MulDivExpContext context);
+	Result VisitComposeExpr([NotNull] SaneParser.ComposeExprContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>function</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
@@ -93,13 +149,6 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitParenthesisExp([NotNull] SaneParser.ParenthesisExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>idAtomExp</c>
-	/// labeled alternative in <see cref="SaneParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitIdAtomExp([NotNull] SaneParser.IdAtomExpContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>letsInExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
@@ -107,12 +156,12 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitLetsInExp([NotNull] SaneParser.LetsInExpContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>addSubExp</c>
+	/// Visit a parse tree produced by the <c>andExpr</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitAddSubExp([NotNull] SaneParser.AddSubExpContext context);
+	Result VisitAndExpr([NotNull] SaneParser.AndExprContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SaneParser.declaration"/>.
 	/// </summary>

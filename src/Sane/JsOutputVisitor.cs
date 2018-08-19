@@ -13,36 +13,38 @@ namespace Sane
             public bool EmptyModuleWarning { get; set; } = true;
         }
 
-        public JsOutputVisitor(Errors errorsSink = null, InstanceConfig config = null) 
+        public JsOutputVisitor(Errors errorsSink = null, InstanceConfig config = null)
             : base(errorsSink)
         {
             Config = config ?? new InstanceConfig();
         }
 
         public InstanceConfig Config { get; }
-        
+
         private Scope Scope = new Scope(null);
-        
+
         public override string Visit(ModuleNode node)
         {
             if (node.Lets.Count == 0 && Config.EmptyModuleWarning)
             {
                 AddError(Error.ErrorLevel.Warning, node, $"Module `{node.Id}` is empty.");
             }
+
             Scope = Scope.CreateChildScope(node);
-            var lets = node.Lets.Aggregate("", (acc, let) => acc + Visit(let) + ";");            
+            var lets = node.Lets.Aggregate("", (acc, let) => acc + Visit(let) + ";");
             var result = $"{node.Id} = {{}};\n{lets}\n";
             Scope = Scope.Parent;
             return result;
         }
 
         public override string Visit(LetNode node)
-        {            
+        {
             var symbol = Scope.FindVariableInCurrent(node.Id);
             if (symbol != null)
             {
                 AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` already exists.");
             }
+
             symbol = Scope.AddVariable(node.Id, node);
             var left = symbol.AbsoluteName();
 
@@ -51,20 +53,23 @@ namespace Sane
             {
                 AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` has no value defined.");
             }
+
             return $"{left} = {right}";
         }
 
         public override string Visit(ExprNode node)
         {
             dynamic arg = node;
-            return Visit(arg);            
+            Console.WriteLine("node");
+            Console.WriteLine(node);
+            return Visit(arg);
         }
 
         public override string Visit(CallNode node)
         {
             var expr = Visit(node.Expr);
             var parameters = string.Join(", ", node.Parameters.Select(Visit));
-            
+
             return $"{expr}({parameters})";
         }
 
@@ -93,31 +98,20 @@ namespace Sane
             var left = Visit(node.Left);
             var right = Visit(node.Right);
             var op = node.Id;
-            // TODO To dziala ale jest malo eleganckie. Zastanowic sie
-            // 1. Wywolywac funkcje "add" - bedzie wygladac slabo w kodzie
-            // 2. Sprawdzac otocznie - niestety brak referencji do ownerow ale sa do childow
-            // 3. Poszperac w ANTLR czy nie ma czegos do takiej sytuacji 
-            switch (op)
-            {
-                case "-":
-                case "+":
-                    return $"({left} {op} {right})";
-                default:
-                    return $"{left} {op} {right}";
-            }
-            
+            return $"({left} {op} {right})";
         }
 
         public override string Visit(FuncNode node)
         {
-            var parameters = string.Join(", ", node.Parameters.Select(param => param.Id));            
+            var parameters = string.Join(", ", node.Parameters.Select(param => param.Id));
             Scope = Scope.CreateChildScope(node);
             foreach (var param in node.Parameters)
             {
                 Scope.AddVariable(param.Id, param);
             }
+
             var body = Visit(node.Body);
-            
+
             var result = $"function ({parameters}) {{\nreturn {body};\n}}";
             Scope = Scope.Parent;
             return result;
@@ -130,23 +124,23 @@ namespace Sane
             {
                 AddError(Error.ErrorLevel.Error, node, $"Variable `{node.Id}` doesn't exist.");
             }
-            
+
             return symbol.AbsoluteName();
         }
 
         public override string Visit(LetInNode node)
         {
             Scope = Scope.CreateChildScope(node);
-            
+
             var lets = node.Lets
                 .Select(let => $"var {Visit(let)};\n")
                 .ToArray();
             var letsExprs = string.Join("", lets);
-            var body = Visit(node.Body);            
-            var result = $"function () {{\n{letsExprs}\nreturn {body};\n}}()"; 
-            
+            var body = Visit(node.Body);
+            var result = $"function () {{\n{letsExprs}\nreturn {body};\n}}()";
+
             Scope = Scope.Parent;
-            
+
             return result;
         }
     }

@@ -53,7 +53,7 @@ A.y = ""dupa \""dupa\"" "";
 A.x = function () {
 var a = 1;
 var b = 2;
-return a + b;
+return (a + b);
 }();
 ";
             ScriptAssert.Equal(js, "", subject.Translate(sane));
@@ -72,60 +72,80 @@ return a + b;
 
             const string js = @"A = {};
 A.x = 1;
-A.y = A.x + (1 * 2) - (3 / 4);
-A.z = A.x + 1 * (2 - 3) / 4;
+A.y = ((A.x + (1 * 2)) - (3 / 4));
+A.z = (((A.x + 1) * (2 - 3)) / 4);
 ";
             ScriptAssert.Equal(js, "", subject.Translate(sane));
         }
-//        
-//        
-//        [Fact]
-//        public void DeclareFunctions()
-//        {
-//            var subject = new Compiler();
-//            const string sane = @"
-//            module A
-//                let x = (a) -> a * 2
-//            end";
-//
-//            const string js = @"A = {};
-//A.x = function(a) {
-//return a * 2;
-//};
-//";
-//            ScriptAssert.Equal(js, "", subject.Translate(sane));
-//        }
-//
-//        [Fact]
-//        public void CallFunction()
-//        {
-//            var subject = new Compiler();
-//            const string sane = @"
-//            module A
-//                let x = (a) -> a * 2
-//                let y = (b) -> x(b + 3)
-//                let z = y(2)
-//                let w = (a b) -> (a) -> a + b + y(b * 2)
-//            end";
-//
-//            const string js = @"A = {};
-//A.x = function(a) {
-//return a * 2;
-//};
-//A.y = function(b) {
-//return A.x(b + 3);
-//};
-//A.z = A.y(2);
-//A.w = function(a, b) {
-//return function(a) {
-//return a + b + A.y(b * 2);
-//};
-//};
-//";
-//            output.WriteLine("CallFunction");
-//            var result = subject.Translate(sane);
-//            ScriptAssert.Equal(js, "", result);
-//        }
+        
+        
+        [Fact]
+        public void DeclareFunctions()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                x = (a) -> a * 2
+            end";
+
+            const string js = @"A = {};
+A.x = function (a) {
+return (a * 2);
+};
+";
+            ScriptAssert.Equal(js, "", subject.Translate(sane));
+        }
+
+        [Fact]
+        public void CallFunction()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                x = (a) -> a * 2
+                y = (b) -> x { b + 3 }                     
+            end";
+
+            const string js = @"A = {};
+A.x = function (a) {
+return (a * 2);
+};
+A.y = function (b) {
+return A.x((b + 3));
+};
+";
+            output.WriteLine("CallFunction");
+            var result = subject.Translate(sane);
+            ScriptAssert.Equal(js, "", result);
+        }
+
+        [Fact]
+        public void CallFunction2()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                x = (a) -> a * 2
+                y = (a b c) -> x { a { b { c } } }
+                z = y {
+                        (a) -> a + 1 
+                        (a) -> a + 2 
+                        3
+                      }                             
+            end";
+
+            const string js = @"A = {};
+A.x = function (a) {
+return (a * 2);
+};
+A.y = function (a, b, c) {return A.x(a(b(c)));};
+A.z = A.y(function (a) {return (a + 1);}, function (a) {return (a + 2);}, 3);
+";
+            output.WriteLine("CallFunction");
+            var result = subject.Translate(sane);
+            ScriptAssert.Equal(js, "", result);
+        }
+        
 //
 //        [Fact]
 //        public void CantFindId()

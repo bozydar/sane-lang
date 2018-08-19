@@ -102,6 +102,43 @@ namespace Sane {
             };
         }
 
+        public override BaseNode VisitParameter(SaneParser.ParameterContext context)
+        {
+            return new ParamNode
+            {
+                Id = context.GetText(),
+                Token = context.Start
+            };
+        }
+
+        public override BaseNode VisitFunction(SaneParser.FunctionContext context)
+        {
+            var parameters = context.parameter()
+                .Select(VisitParameter)
+                .Cast<ParamNode>()
+                .ToList();
+            var body = Visit(context.body) as ExprNode;
+            return new FuncNode
+            {
+                Parameters = parameters,
+                Body = body
+            };
+        }
+
+        public override BaseNode VisitCall(SaneParser.CallContext context)
+        {
+            var parameters = context.expression().Skip(1)
+                .Select(Visit)
+                .Cast<ExprNode>()
+                .ToList();
+            var expression = (ExprNode)Visit(context.callable);             
+            return new CallNode
+            {
+                Parameters = parameters,
+                Expr = expression
+            };
+        }
+
         public override BaseNode VisitNumericAtomExp(SaneParser.NumericAtomExpContext context)
         {
             if (!decimal.TryParse(context.value.Text, out var value))

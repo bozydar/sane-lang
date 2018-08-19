@@ -163,7 +163,7 @@ A.b = 1;
 A = {};
 A.out = 10;
 A.f = function (arg0, arg1) {
-return ""dupa"" + arg0 + A.out;
+return (""dupa"" + (arg0 + A.out));
 };
 ";
             var result = subject.Visit(module);
@@ -226,7 +226,7 @@ A = {};
 A.evalNow = function () {
 var a = 1;
 var b = 2;
-return a + b;
+return (a + b);
 }();
 ";
             var result = subject.Visit(module);
@@ -319,7 +319,7 @@ return a + b;
             const string js = @"
 A = {};
 A.f = function (arg0, arg1) {
-return arg0 + arg1;
+return (arg0 + arg1);
 };
 A.main = function () {
 return function () {
