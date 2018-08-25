@@ -86,6 +86,13 @@ public interface ISaneVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitOrExpr([NotNull] SaneParser.OrExprContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>externalNode</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitExternalNode([NotNull] SaneParser.ExternalNodeContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>idAtomExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>

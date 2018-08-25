@@ -60,8 +60,6 @@ namespace Sane
         public override string Visit(ExprNode node)
         {
             dynamic arg = node;
-            Console.WriteLine("node");
-            Console.WriteLine(node);
             return Visit(arg);
         }
 
@@ -90,7 +88,7 @@ namespace Sane
 
         public override string Visit(ExternalNode node)
         {
-            throw new System.NotImplementedException();
+            return node.Body;
         }
 
         public override string Visit(BinaryExprNode node)

@@ -3,7 +3,7 @@ grammar Sane;
 options {
     language=CSharp;   
 }
-      
+
 module 
     : 'module' moduleName=ID  (declaration|let)* 'end';
     
@@ -14,10 +14,13 @@ parameter
     : ID;
 
 expression 
-    : '(' body=expression ')'                        
+    : body=TemplateStringLiteral
+        #externalNode     
+    | '(' body=expression ')'                        
         #parenthesisExp
     | 'let' lets=let* 'in' body=expression 'end'
         #letsInExp
+    // TODO Prefix operators
     | (PLUS|MINUS) right=expression
         #leftPlusMinus
     | left=expression operation=(ASTERISK|SLASH) right=expression    
@@ -49,14 +52,13 @@ expression
         #function
     | value=NUMBER                                    
         #numericAtomExp
-    | value=ESCAPED_STRING  
+    | value=ESCAPED_STRING // TODO: DoubleString
         #stringAtomExp
     | id=ID
         #idAtomExp;
 
 declaration
-    : 'foreign' ID ':' type 
-    | ID ':' type;
+    : ID ':' type;
 
 type
     : '(' type+ ')'                        
@@ -78,8 +80,58 @@ WHITESPACE          : [ \n\t\r]+ -> skip;
 SingleLineComment   : '//' ~[\r\n\u2028\u2029]* -> channel(HIDDEN);
 
 ESCAPED_STRING      : '"' ( '""' | ~["] )* '"';
+
+DoubleString        : '"' DoubleStringCharacter* '"';
+
+TemplateStringLiteral: '```' ('\\`' | ~'`')* '```';
+
 fragment LETTER     : [a-zA-Z]+ ;
 fragment DIGIT      : [0-9]+ ;
+
+fragment DoubleStringCharacter
+    : ~["\\\r\n]
+    | '\\' EscapeSequence
+    | LineContinuation
+    ;
+fragment EscapeSequence
+    : CharacterEscapeSequence
+    | '0' // no digit ahead! TODO
+    | HexEscapeSequence
+    | UnicodeEscapeSequence
+    | ExtendedUnicodeEscapeSequence
+    ;
+fragment CharacterEscapeSequence
+    : SingleEscapeCharacter
+    | NonEscapeCharacter
+    ;
+fragment HexEscapeSequence
+    : 'x' HexDigit HexDigit
+    ;
+fragment UnicodeEscapeSequence
+    : 'u' HexDigit HexDigit HexDigit HexDigit
+    ;
+fragment ExtendedUnicodeEscapeSequence
+    : 'u' '{' HexDigit+ '}'
+    ;
+fragment SingleEscapeCharacter
+    : ['"\\bfnrtv]
+    ;
+
+fragment NonEscapeCharacter
+    : ~['"\\bfnrtv0-9xu\r\n]
+    ;
+fragment EscapeCharacter
+    : SingleEscapeCharacter
+    | [0-9]
+    | [xu]
+    ;
+fragment LineContinuation
+    : '\\' [\r\n\u2028\u2029]
+    ;
+fragment HexDigit
+    : [0-9a-fA-F]
+    ;
+    
 
 
 // expression          : '(' expression ')'                        #parenthesisExp

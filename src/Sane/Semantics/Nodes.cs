@@ -7,13 +7,14 @@ namespace Sane.Semantics
 {
     public interface IScopeProviding
     {
-        string ScopeName { get; } 
+        string ScopeName { get; }
     }
+
     public abstract class BaseNode
     {
         public IToken Token { get; set; }
     }
-    
+
     public class ModuleNode : BaseNode, IScopeProviding
     {
         public string Id { get; set; }
@@ -29,11 +30,11 @@ namespace Sane.Semantics
 
     public abstract class ExprNode : BaseNode
     {
-        
+
     }
 
     public class CallNode : ExprNode
-    {        
+    {
         public IList<ExprNode> Parameters { get; set; }
         public ExprNode Expr { get; set; }
     }

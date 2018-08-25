@@ -145,19 +145,33 @@ A.z = A.y(function (a) {return (a + 1);}, function (a) {return (a + 2);}, 3);
             var result = subject.Translate(sane);
             ScriptAssert.Equal(js, "", result);
         }
-        
-//
-//        [Fact]
-//        public void CantFindId()
-//        {
-//            var subject = new Compiler();
-//            const string sane = @"
-//            module A
-//                let x = () -> b
-//            end
-//";
-//            var result = subject.Translate(sane);
-//        }
+
+
+        [Fact]
+        public void ExtensionValue()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                log = ```
+                    function (value) { 
+                        console.log(value); /*comment*/ 
+                    }
+                      ```
+                a = 2
+                b = ```\`value: ${A.a}\````
+            end
+";
+            const string js = @"A = {};
+A.log = function (value) { 
+                        console.log(value); /*comment*/ 
+                    };
+A.a = 2;
+A.b = `value: ${A.a}`;";
+            var result = subject.Translate(sane);
+            ScriptAssert.Equal(js, "", result);
+        }
+
 //
 //        public void DeclareRecursive()
 //        {
@@ -255,5 +269,5 @@ A.z = A.y(function (a) {return (a + 1);}, function (a) {return (a + 2);}, 3);
 //            ";
 ////            Assert.Equal(subject.Translate(sane), js);
 //        }
-    }
+        }
 }

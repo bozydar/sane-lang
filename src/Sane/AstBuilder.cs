@@ -5,6 +5,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Net.Security;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
@@ -59,6 +60,20 @@ namespace Sane {
             {
                 Lets = lets,
                 Body = expr,
+                Token = context.Start
+            };
+        }
+
+        public override BaseNode VisitExternalNode(SaneParser.ExternalNodeContext context)
+        {
+            // cut 3 first and last graves
+            var body = context.body.Text
+                .Substring(3, context.body.Text.Length - 6)
+                .Trim()
+                .Replace("\\`", "`");
+            return new ExternalNode
+            {
+                Body = body,
                 Token = context.Start
             };
         }

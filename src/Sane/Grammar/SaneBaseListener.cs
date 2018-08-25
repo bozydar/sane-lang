@@ -142,6 +142,20 @@ public partial class SaneBaseListener : ISaneListener {
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitOrExpr([NotNull] SaneParser.OrExprContext context) { }
 	/// <summary>
+	/// Enter a parse tree produced by the <c>externalNode</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterExternalNode([NotNull] SaneParser.ExternalNodeContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by the <c>externalNode</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitExternalNode([NotNull] SaneParser.ExternalNodeContext context) { }
+	/// <summary>
 	/// Enter a parse tree produced by the <c>idAtomExp</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// <para>The default implementation does nothing.</para>

@@ -332,6 +332,35 @@ return A.f(x, 2);
             ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
+        
+        [Fact]
+        public void VisitExtension()
+        {
+            var subject = new JsOutputVisitor(config: new JsOutputVisitor.InstanceConfig {EmptyModuleWarning = false});
+            var module = new ModuleNode
+            {
+                Id = "A",
+                Lets = new List<LetNode>
+                {
+                    new LetNode
+                    {
+                        Id = "a",
+                        Expr = new ExternalNode
+                        {
+                            Body = "function (value) {\n console.log(value); /*comment*/\n}"
+                        }
+                    }
+                }
+            };
+            
+            const string js = @"
+A = {};
+A.a = function (value) { console.log(value); /*comment*/};
+";
+            var result = subject.Visit(module);
+            ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
+            ScriptAssert.Equal(js, result);
+        }
 
         [Fact]
         public void VisitList()
