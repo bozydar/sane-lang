@@ -8,7 +8,7 @@ return
 where
 
     map : List(A) -> (A -> B) -> List(B)
-    ext map = ```function (list, func) {
+    map = ```function (list, func) {
         list.map(func);
     }
     ```
@@ -39,7 +39,7 @@ where
                     return loop(con) where 
                         con = concat(func(head(list)) tail(list))
 
-    def revert : List(A) -> List(A)
+    revert : List(A) -> List(A)
     rec revert = (list) ->
         if length(list) < 1
             list

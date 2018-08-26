@@ -38,7 +38,15 @@ expression
     // maybe to introduce capturing: left |> & right(a &1 c)  ==> ((_a1) -> right(a _a1 c))(left)
     // it would require to introduce a new operator '&' right=expression
     // Tu rodzi się pytanie, czy to ma być bardziej haskell czy Elixir, ponieważ analiza typu może być
-    // w tym przypadku megabolesna. Jeżeli będzie implicit currying nie ma sprawy ale wycinanie ze  środka?! 
+    // w tym przypadku megabolesna. Jeżeli będzie implicit currying nie ma sprawy ale wycinanie ze  środka?!
+    // chyba że potraktujemy aplikację argumentów jak aplikowanie jednego argumentu, który jest listą na funkcji i 
+    // zorbienia "pattern matchingu" na tych argumentach. Wtedy nie mamy f-cji wielu argumentów a zawsze f-cję jednego
+    // argumentu który jest tuplą (params). Dodatkowo, można też potraktować argumenty jako rekord. Sprowadziłoby się
+    // to do tego, że każda f-cja miałaby dwa nagłówki: tuplową i rekordową, Np:
+    // map : (List(T), (T -> K)) -> List(K)  
+    // map : (list: List(T), func: (T -> K)) -> List(K)
+    // map = ```function (list, func) { return list.map(func); }```  
+    // Wtedy cała sprawa redukuje się do dodanie 
     // left |> right(a b c)  --> right(left a b c) |
     // left |> right  --> right(left)
     // TODO special syntax  
@@ -46,6 +54,8 @@ expression
         #pipeExpr     
     | left=expression ('>>'|'<<') right=expression
         #composeExpr        
+    // to jest tak na prawdę opeator aplikacji
+    // możnaby pisać map {list} {func} jak i map {list func}
     | callable=expression '{' arguments=expression* '}'
         #call
     | '(' parameters=parameter* ')' '->' body=expression

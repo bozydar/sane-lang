@@ -171,6 +171,33 @@ A.b = `value: ${A.a}`;";
             var result = subject.Translate(sane);
             ScriptAssert.Equal(js, "", result);
         }
+        
+//        [Fact]
+//        public void PipeOperator()
+//        {
+//            var subject = new Compiler();
+//            const string sane = @"
+//            module A
+//                map : forall T P. List(T) -> (T -> P) -> List(P)   
+//                map = ```
+//                    function (list, func) { 
+//                        reutn list.map(func); 
+//                    }
+//                      ```
+//                a = [1 2 3]
+//                b = a
+//                |> map { func := (x) -> x + 1 }
+//            end
+//";
+//            const string js = @"A = {};
+//A.log = function (value) { 
+//                        console.log(value); /*comment*/ 
+//                    };
+//A.a = 2;
+//A.b = `value: ${A.a}`;";
+//            var result = subject.Translate(sane);
+//            ScriptAssert.Equal(js, "", result);
+//        }
 
 //
 //        public void DeclareRecursive()

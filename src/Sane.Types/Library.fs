@@ -189,7 +189,7 @@ let test (e : Exp) =
     with ex -> printfn "ERROR %O" ex
 
 
-[<EntryPoint>]
+// [<EntryPoint>]
 let main argv = 
     [
         ELet ("id", EAbstraction ("x", EVariable "x"), EVariable "id")

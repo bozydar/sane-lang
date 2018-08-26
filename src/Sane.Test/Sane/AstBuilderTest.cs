@@ -1,5 +1,4 @@
-﻿using Sane.Test.Utils;
-using Xunit;
+﻿using Xunit;
 
 namespace Sane.Test.Sane
 {
