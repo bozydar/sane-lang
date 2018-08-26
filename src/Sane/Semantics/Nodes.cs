@@ -72,9 +72,9 @@ namespace Sane.Semantics
         public string Id { get; set; }
     }
 
-    public class ListNode : ExprNode
+    public class ArrayNode : ExprNode
     {
-        public IList<ExprNode> ExprNodes { get; set; }
+        public IList<ExprNode> Exprs { get; set; }
     }
 
     public class LetInNode : ExprNode

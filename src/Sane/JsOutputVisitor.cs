@@ -81,9 +81,10 @@ namespace Sane
             return $"{node.Value}";
         }
 
-        public override string Visit(ListNode node)
+        public override string Visit(ArrayNode node)
         {
-            throw new System.NotImplementedException();
+            var expressions = string.Join(", ", node.Exprs.Select(Visit));
+            return $"[{expressions}]";
         }
 
         public override string Visit(ExternalNode node)

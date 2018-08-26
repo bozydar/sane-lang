@@ -122,6 +122,18 @@ public interface ISaneListener : IParseTreeListener {
 	/// <param name="context">The parse tree.</param>
 	void ExitOrExpr([NotNull] SaneParser.OrExprContext context);
 	/// <summary>
+	/// Enter a parse tree produced by the <c>arrayExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void EnterArrayExp([NotNull] SaneParser.ArrayExpContext context);
+	/// <summary>
+	/// Exit a parse tree produced by the <c>arrayExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	void ExitArrayExp([NotNull] SaneParser.ArrayExpContext context);
+	/// <summary>
 	/// Enter a parse tree produced by the <c>externalNode</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// </summary>

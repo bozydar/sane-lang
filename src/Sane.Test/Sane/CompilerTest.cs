@@ -145,6 +145,26 @@ A.z = A.y(function (a) {return (a + 1);}, function (a) {return (a + 2);}, 3);
             var result = subject.Translate(sane);
             ScriptAssert.Equal(js, "", result);
         }
+        
+        [Fact]
+        public void Array()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                x = [1 2 3 4]
+                y = [(x) -> x + 1 (y) -> y * 2 + 1]                             
+            end";
+
+            const string js = @"A = {};
+A.x = [1, 2, 3, 4];
+A.y = [function (x) {return (x + 1);}, function (y) {return ((y * 2) + 1);}];
+";
+            output.WriteLine("CallFunction");
+            var result = subject.Translate(sane);
+            ScriptAssert.Equal(js, "", result);
+        }
+        
 
 
         [Fact]

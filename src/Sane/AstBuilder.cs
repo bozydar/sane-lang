@@ -168,6 +168,19 @@ namespace Sane {
             };
         }
 
+        public override BaseNode VisitArrayExp(SaneParser.ArrayExpContext context)
+        {
+            var exprs = context.expression()
+                .Select(Visit)
+                .Cast<ExprNode>()
+                .ToList();
+            return new ArrayNode
+            {
+                Exprs = exprs,
+                Token = context.Start
+            };
+        }
+
         public override BaseNode VisitStringAtomExp(SaneParser.StringAtomExpContext context)
         {
             var value = context.value.Text.Trim('"').Replace("\"\"", "\\\"");

@@ -120,6 +120,17 @@ public partial class SaneBaseVisitor<Result> : AbstractParseTreeVisitor<Result>,
 	/// <return>The visitor result.</return>
 	public virtual Result VisitOrExpr([NotNull] SaneParser.OrExprContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>arrayExp</c>
+	/// labeled alternative in <see cref="SaneParser.expression"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitArrayExp([NotNull] SaneParser.ArrayExpContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>externalNode</c>
 	/// labeled alternative in <see cref="SaneParser.expression"/>.
 	/// <para>

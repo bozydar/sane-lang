@@ -18,6 +18,8 @@ expression
         #externalNode     
     | '(' body=expression ')'                        
         #parenthesisExp
+    | '[' expressions=expression* ']'
+        #arrayExp
     | 'let' lets=let* 'in' body=expression 'end'
         #letsInExp
     // TODO Prefix operators

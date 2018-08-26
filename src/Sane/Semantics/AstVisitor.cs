@@ -18,7 +18,7 @@ namespace Sane.Semantics
         public abstract T Visit(CallNode node);
         public abstract T Visit(StringNode node);
         public abstract T Visit(NumericNode node);
-        public abstract T Visit(ListNode node);
+        public abstract T Visit(ArrayNode node);
         public abstract T Visit(ExternalNode node);
         public abstract T Visit(BinaryExprNode node); 
         public abstract T Visit(FuncNode node);

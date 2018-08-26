@@ -277,7 +277,7 @@ return (a + b);
                     {
                         Id = "main",
                         Expr = new FuncNode
-                        {           
+                        {
                             Parameters = new List<ParamNode>(),
                             Body = new LetInNode
                             {
@@ -332,7 +332,7 @@ return A.f(x, 2);
             ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
             ScriptAssert.Equal(js, result);
         }
-        
+
         [Fact]
         public void VisitExtension()
         {
@@ -352,7 +352,7 @@ return A.f(x, 2);
                     }
                 }
             };
-            
+
             const string js = @"
 A = {};
 A.a = function (value) { console.log(value); /*comment*/};
@@ -392,6 +392,44 @@ A.a = function (value) { console.log(value); /*comment*/};
             var ex = Record.Exception(() => subject.Visit(module)) as CompilationException;
 
             ScriptAssert.Equal("Error:N/A: Variable `a` already exists.", ex.Errors.GetErrorsString());
+        }
+
+        [Fact]
+        public void VisitArray()
+        {
+            var subject = new JsOutputVisitor();
+            var module = new ModuleNode
+            {
+                Id = "A",
+                Lets = new List<LetNode>
+                {
+                    new LetNode
+                    {
+                        Id = "a",
+                        Expr = new ArrayNode
+                        {
+                            Exprs = new List<ExprNode>
+                            {
+                                new NumericNode
+                                {
+                                    Value = 0
+                                },
+                                new NumericNode
+                                {
+                                    Value = 1
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            var result = subject.Visit(module);
+            const string js = @"
+A = {};
+A.a = [0, 1];
+";
+            ScriptAssert.Equal("", subject.ErrorsSink.GetErrorsString());
+            ScriptAssert.Equal(js, result);
         }
     }
 }
