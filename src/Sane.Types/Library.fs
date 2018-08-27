@@ -1,4 +1,5 @@
 module AlgorithmW
+open System
 
 // HINDLEY-MILNER TYPE INFERENCE
 // Based on http://catamorph.de/documents/AlgorithmW.pdf
@@ -107,7 +108,7 @@ let generalize (env : TypeEnv) (t : Type) =
 
 /// Generates a new type variable. STATEFUL.
 let newTyVar =
-    let nextIndex = ref 1
+    let nextIndex = ref 0
     fun n ->
         let nn = sprintf "%s%d" n !nextIndex
         nextIndex := !nextIndex + 1
@@ -189,11 +190,11 @@ let test (e : Exp) =
     with ex -> printfn "ERROR %O" ex
 
 
-// [<EntryPoint>]
+[<EntryPoint>]
 let main argv = 
     [
-        ELet ("id", EAbstraction ("x", EVariable "x"), EVariable "id")
-        ELet ("id", ELiteral (LInt 42), EVariable "id")
+        ELet ("id", EAbstraction ("x", EAbstraction ("y", EVariable "x")), EVariable "id") // let id = (x) -> x in id  :: a -> a
+        ELet ("id", ELiteral (LInt 42), EVariable "id")  // id = 42 :: Int
     ]
     |> Seq.iter test
     0
