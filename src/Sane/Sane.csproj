@@ -3,22 +3,9 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.4">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Antlr4.Runtime.Standard" Version="4.7.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <Antlr4 Include="Sane.g4">
-      <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>Sane</CustomToolNamespace>
-      <Abstract>False</Abstract>
-      <ForceAtn>False</ForceAtn>
-      <Listener>True</Listener>
-      <Visitor>True</Visitor>
-    </Antlr4>
+    <ProjectReference Include="..\Sane.Types\Sane.Types.fsproj" />
   </ItemGroup>
-  <PropertyGroup>
-    <Antlr4UseCSharpGenerator>True</Antlr4UseCSharpGenerator>
-  </PropertyGroup>
 </Project>

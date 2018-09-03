@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Antlr4.Runtime;
+using Sane.TypeSystem;
 
 namespace Sane.Semantics
 {

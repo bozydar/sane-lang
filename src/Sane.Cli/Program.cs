@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Sane.Cli
 {
-    class Program
+    internal static class Program
     {
         public static void Main(string[] args)
         {
@@ -24,6 +23,11 @@ namespace Sane.Cli
                 var inputFilePath = fileInArgument.Value;
                 var outputFilePath = outputOption.HasValue() ? outputOption.Value() : inputFilePath + ".js";
                 var compiler = new Compiler();
+                if (string.IsNullOrEmpty(inputFilePath))
+                {
+                    app.Error.WriteLine("No input file provided. sanec --help to find out more");
+                    return 1;
+                }
                 var input = File.ReadAllText(inputFilePath);
                 var translationResult = compiler.Translate(input);
                 var output = new Output(translationResult, outputFilePath);

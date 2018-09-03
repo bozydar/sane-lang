@@ -192,6 +192,26 @@ A.b = `value: ${A.a}`;";
             ScriptAssert.Equal(js, "", result);
         }
         
+        [Fact]
+        public void CheckType()
+        {
+            var subject = new Compiler();
+            const string sane = @"
+            module A
+                a : int
+                a = ""dwa""
+            end
+";
+            const string js = @"A = {};
+A.log = function (value) { 
+                        console.log(value); /*comment*/ 
+                    };
+A.a = 2;
+A.b = `value: ${A.a}`;";
+            var result = subject.Translate(sane);
+            ScriptAssert.Equal(js, "", result);
+        }
+        
 //        [Fact]
 //        public void PipeOperator()
 //        {

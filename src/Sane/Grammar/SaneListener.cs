@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from /home/bozydar/workspaces/sane/src/Sane/Sane.g4 by ANTLR 4.7
+// Generated from C:/Users/USER/RiderProjects/sane-lang/src/Sane\Sane.g4 by ANTLR 4.7
 
 // Unreachable code detected
 #pragma warning disable 0162

@@ -10,7 +10,7 @@ namespace Sane.Test.Sane
             var subject = new AstBuilder();
             const string sane = @"
             module A
-                let x = 1
+                x = 1
             end";
 
             const string js = @"A = {};
